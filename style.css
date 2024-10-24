@@ -23,7 +23,8 @@ body {
     white-space: nowrap;
     margin: 0 auto;
     letter-spacing: .15em;
-    animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+    animation: typing 3.5s steps(40, end) forwards, blink-caret .75s step-end 7;
+    text-align: center;
 }
 
 @keyframes typing {

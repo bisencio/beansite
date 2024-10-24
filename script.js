@@ -25,14 +25,12 @@ function addTodo() {
     todoInput.value = '';
 }
 
-// Allow adding todos with Enter key
 todoInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
         addTodo();
     }
 });
 
-// Project Cards Animation
 const projectCards = document.querySelectorAll('.project-card');
 projectCards.forEach(card => {
     card.addEventListener('click', () => {

@@ -33,10 +33,11 @@ todoInput.addEventListener('keypress', function(e) {
 
 const projectCards = document.querySelectorAll('.project-card');
 projectCards.forEach(card => {
-    card.addEventListener('click', () => {
-        card.style.transform = 'scale(1.02)';
-        setTimeout(() => {
-            card.style.transform = 'translateY(-5px)';
-        }, 200);
+    card.addEventListener('mousedown', () => {
+        card.style.transform = 'scale(0.98)';
+    });
+    card.addEventListener('mouseup', () => {
+        card.style.transform = 'translateY(-5px)';
     });
 });
+

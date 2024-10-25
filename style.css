@@ -1,3 +1,4 @@
+/* General Reset and Styling */
 * {
     margin: 0;
     padding: 0;
@@ -6,43 +7,60 @@
 }
 
 body {
-    background-color: #0a192f;
-    color: #64ffda;
+    background: linear-gradient(-45deg, #001f3f, #004080, #001f3f, #004080);
+    background-size: 400% 400%;
+    color: #50bfff;
     line-height: 1.6;
     padding: 2rem;
+    animation: backgroundAnimation 15s ease infinite;
 }
 
 .container {
     max-inline-size: 800px;
-    margin: 0 auto;
+    margin-inline: auto;
 }
 
+/* Typewriter Effect */
 .typewriter {
     overflow: hidden;
-    border-inline-end: .15em solid #64ffda;
+    border-inline-end: 0.15em solid #50bfff;
     white-space: nowrap;
-    margin: 0 auto;
-    letter-spacing: .15em;
-    animation: typing 3.5s steps(40, end) forwards, blink-caret .75s step-end 7;
+    margin-inline: auto;
+    letter-spacing: 0.15em;
+    animation: typing 3.5s steps(40, end) forwards, blink-caret 0.75s step-end 7;
     text-align: center;
 }
 
+/* Keyframes for Animations */
 @keyframes typing {
-    from { inline-size: 0 }
-    to { inline-size: 100% }
+    from { inline-size: 0; }
+    to { inline-size: 100%; }
 }
 
 @keyframes blink-caret {
-    from, to { border-color: transparent }
-    50% { border-color: #64ffda; }
+    from, to { border-color: transparent; }
+    50% { border-color: #50bfff; }
 }
 
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes backgroundAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Section Styling with Enhanced Fade-In Animation */
 section {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.1);
     padding: 2rem;
     margin-block: 2rem;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 1s ease both;
 }
 
 h1, h2 {
@@ -50,13 +68,14 @@ h1, h2 {
     margin-block-end: 1rem;
 }
 
+/* To-Do List Styling */
 .todo-container {
     margin-block: 1rem;
 }
 
 .todo-input {
     background: #172a45;
-    border: 1px solid #64ffda;
+    border: 1px solid #50bfff;
     color: #fff;
     padding: 0.5rem;
     margin-inline-end: 0.5rem;
@@ -64,8 +83,8 @@ h1, h2 {
 }
 
 .todo-button {
-    background: #64ffda;
-    color: #0a192f;
+    background: #50bfff;
+    color: #001f3f;
     border: none;
     padding: 0.5rem 1rem;
     cursor: pointer;
@@ -92,6 +111,16 @@ h1, h2 {
     align-items: center;
 }
 
+.delete-btn {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Project Cards Styling with Hover Effect */
 .project-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -103,23 +132,17 @@ h1, h2 {
     background: #172a45;
     padding: 1rem;
     border-radius: 4px;
-    cursor: pointer;
-    transition: transform 0.3s;
+    transition: transform 0.3s, background-color 0.3s;
+    color: #50bfff;
+    text-decoration: none;
 }
 
 .project-card:hover {
     transform: translateY(-5px);
+    background-color: #1f3555;
 }
 
-.delete-btn {
-    background: #ff6b6b;
-    color: white;
-    border: none;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
+/* Contact Section Styling with Icon */
 .contact-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -135,7 +158,7 @@ h1, h2 {
     padding: 1rem;
     border-radius: 5px;
     text-decoration: none;
-    color: #64ffda;
+    color: #50bfff;
     transition: transform 0.3s, background-color 0.3s;
 }
 
@@ -146,4 +169,21 @@ h1, h2 {
 
 .contact-icon {
     font-size: 1.5rem;
+    display: inline-block;
+    inline-size: 24px;
+    block-size: 24px;
+}
+
+/* Responsive Design for Mobile Devices */
+@media (max-width: 600px) {
+    body {
+        padding: 1rem;
+    }
+    .container {
+        padding: 1rem;
+    }
+    .todo-input, .todo-button {
+        inline-size: 100%;
+        margin-block: 0.5rem;
+    }
 }

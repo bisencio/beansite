@@ -45,10 +45,10 @@ const header = document.querySelector('.intro-section');
 window.addEventListener('scroll', () => {
     const currentScrollPosition = window.pageYOffset;
     
-    if (currentScrollPosition > lastScrollPosition) {
-        header.classList.add('hidden');
+    if (currentScrollPosition > 50) {
+        header.classList.add('scrolled');
     } else {
-        header.classList.remove('hidden');
+        header.classList.remove('scrolled');
     }
     
     lastScrollPosition = currentScrollPosition;

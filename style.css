@@ -9,9 +9,10 @@ body {
     background: radial-gradient(circle at top, #00001a, #000000);
     color: #00ffcc;
     line-height: 1.6;
-    padding: clamp(1rem, 5vw, 2rem);
+    padding-block-start: 80px;
     min-block-size: 100vh;
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
 }
 
 .container {
@@ -23,20 +24,49 @@ body {
 .typewrite {
     color: #00ffcc;
     text-decoration: none;
-    display: inline-block;
-    font-size: clamp(1.5rem, 4vw, 2rem);
-    white-space: nowrap;
-    overflow: hidden;
+    display: block;
+    text-align: center;
+    font-size: clamp(1rem, 2.5vw, 1.8rem);
+    min-block-size: 2.5em;
+    padding: 0.5rem;
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 
 .typewrite > .wrap {
     border-inline-end: 0.08em solid #00ffcc;
     animation: blink-caret 0.75s step-end infinite;
+    display: inline-block;
+    max-inline-size: 85vw;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
 }
 
 @keyframes blink-caret {
     from, to { border-color: transparent }
     50% { border-color: #00ffcc }
+}
+
+.intro-section {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    background: rgba(0, 0, 26, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+    transition: transform 0.3s ease-in-out;
+    min-block-size: 80px;
+}
+
+.intro-section.hidden {
+    transform: translateY(-50%) !important;
 }
 
 section {
@@ -45,27 +75,19 @@ section {
     margin-block: clamp(1rem, 3vw, 2rem);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 255, 204, 0.2);
-}
-
-.intro-section {
-    margin-block-end: clamp(1rem, 3vw, 2rem);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.fade-in-section {
     opacity: 0;
-    transform: translateY(20px);
-    visibility: hidden;
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-    will-change: opacity, visibility, transform;
+    transform: translateX(-20px);
+    transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+    will-change: transform, opacity;
+}
+
+section:nth-child(even) {
+    transform: translateX(20px);
 }
 
 .fade-in-section.is-visible {
     opacity: 1;
-    transform: translateY(0);
-    visibility: visible;
+    transform: translateX(0);
 }
 
 h1, h2 {
@@ -100,6 +122,7 @@ h1, h2 {
     transition: opacity 0.3s;
     inline-size: 100%;
     font-size: clamp(14px, 2vw, 16px);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .todo-button:hover {
@@ -131,6 +154,7 @@ h1, h2 {
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .project-grid {
@@ -148,9 +172,10 @@ h1, h2 {
     color: #00ffcc;
     text-decoration: none;
     block-size: 100%;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.project-card:hover {
+.project-card:hover, .project-card:active {
     transform: translateY(-5px);
     background-color: #003366;
 }
@@ -172,16 +197,34 @@ h1, h2 {
     text-decoration: none;
     color: #00ffcc;
     transition: transform 0.3s, background-color 0.3s;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.contact-item:hover {
+.contact-item:hover, .contact-item:active {
     transform: translateY(-3px);
     background: #003366;
 }
 
 @media (max-width: 600px) {
     .typewrite {
-        white-space: normal;
-        word-break: break-word;
+        font-size: clamp(0.9rem, 4vw, 1.2rem);
+        padding: 0.25rem;
+    }
+
+    .intro-section {
+        min-block-size: 60px;
+    }
+
+    section {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    section:nth-child(even) {
+        transform: translateY(20px);
+    }
+
+    .fade-in-section.is-visible {
+        transform: translateY(0);
     }
 }

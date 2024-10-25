@@ -39,8 +39,23 @@ TxtType.prototype.tick = function() {
     }, delta);
 };
 
+let lastScrollPosition = 0;
+const header = document.querySelector('.intro-section');
+
+window.addEventListener('scroll', () => {
+    const currentScrollPosition = window.pageYOffset;
+    
+    if (currentScrollPosition > lastScrollPosition) {
+        header.classList.add('hidden');
+    } else {
+        header.classList.remove('hidden');
+    }
+    
+    lastScrollPosition = currentScrollPosition;
+});
+
 function handleScrollAnimation() {
-    const sections = document.querySelectorAll('.fade-in-section');
+    const sections = document.querySelectorAll('section');
     
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -95,19 +110,6 @@ projectCards.forEach(card => {
     card.addEventListener('mouseup', () => {
         card.style.transform = 'translateY(-5px)';
     });
-});
-
-document.addEventListener('mousemove', function(e) {
-    const header = document.querySelector('header');
-    const interactiveBg = document.createElement('div');
-    interactiveBg.classList.add('interactive-bg');
-    interactiveBg.style.setProperty('--x', `${e.clientX}px`);
-    interactiveBg.style.setProperty('--y', `${e.clientY}px`);
-    header.appendChild(interactiveBg);
-
-    setTimeout(() => {
-        interactiveBg.remove();
-    }, 1000);
 });
 
 window.onload = function() {

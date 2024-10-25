@@ -1,95 +1,105 @@
-/* General Reset and Styling */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Courier New', monospace;
+    font-family: 'Consolas', monospace;
 }
 
 body {
-    background: linear-gradient(-45deg, #001f3f, #004080, #001f3f, #004080);
-    background-size: 400% 400%;
-    color: #50bfff;
+    background: radial-gradient(circle at top, #00001a, #000000);
+    color: #00ffcc;
     line-height: 1.6;
-    padding: 2rem;
-    animation: backgroundAnimation 15s ease infinite;
+    padding: clamp(1rem, 5vw, 2rem);
+    min-block-size: 100vh;
+    overflow-x: hidden;
 }
 
 .container {
-    max-inline-size: 800px;
+    max-inline-size: min(800px, 95%);
     margin-inline: auto;
+    padding: clamp(0.5rem, 3vw, 1.5rem);
 }
 
-/* Typewriter Effect */
-.typewriter {
-    overflow: hidden;
-    border-inline-end: 0.15em solid #50bfff;
+.typewrite {
+    color: #00ffcc;
+    text-decoration: none;
+    display: inline-block;
+    font-size: clamp(1.5rem, 4vw, 2rem);
     white-space: nowrap;
-    margin-inline: auto;
-    letter-spacing: 0.15em;
-    animation: typing 3.5s steps(40, end) forwards, blink-caret 0.75s step-end 7;
-    text-align: center;
+    overflow: hidden;
 }
 
-/* Keyframes for Animations */
-@keyframes typing {
-    from { inline-size: 0; }
-    to { inline-size: 100%; }
+.typewrite > .wrap {
+    border-inline-end: 0.08em solid #00ffcc;
+    animation: blink-caret 0.75s step-end infinite;
 }
 
 @keyframes blink-caret {
-    from, to { border-color: transparent; }
-    50% { border-color: #50bfff; }
+    from, to { border-color: transparent }
+    50% { border-color: #00ffcc }
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes backgroundAnimation {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* Section Styling with Enhanced Fade-In Animation */
 section {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 2rem;
-    margin-block: 2rem;
+    background: rgba(0, 0, 0, 0.7);
+    padding: clamp(1rem, 4vw, 2rem);
+    margin-block: clamp(1rem, 3vw, 2rem);
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    animation: fadeIn 1s ease both;
+    box-shadow: 0 4px 8px rgba(0, 255, 204, 0.2);
+}
+
+.intro-section {
+    margin-block-end: clamp(1rem, 3vw, 2rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fade-in-section {
+    opacity: 0;
+    transform: translateY(20px);
+    visibility: hidden;
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    will-change: opacity, visibility, transform;
+}
+
+.fade-in-section.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
 }
 
 h1, h2 {
-    color: #ccd6f6;
-    margin-block-end: 1rem;
+    color: #00ffcc;
+    margin-block-end: clamp(0.5rem, 2vw, 1rem);
+    font-size: clamp(1.5rem, 4vw, 2rem);
 }
 
-/* To-Do List Styling */
 .todo-container {
     margin-block: 1rem;
+    inline-size: 100%;
 }
 
 .todo-input {
-    background: #172a45;
-    border: 1px solid #50bfff;
-    color: #fff;
-    padding: 0.5rem;
-    margin-inline-end: 0.5rem;
+    background: #001f3f;
+    border: 1px solid #00ffcc;
+    color: #00ffcc;
+    padding: 0.75rem;
     border-radius: 4px;
+    inline-size: 100%;
+    margin-block-end: 0.5rem;
+    font-size: clamp(14px, 2vw, 16px);
 }
 
 .todo-button {
-    background: #50bfff;
+    background: #00ffcc;
     color: #001f3f;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
     cursor: pointer;
     border-radius: 4px;
     transition: opacity 0.3s;
+    inline-size: 100%;
+    font-size: clamp(14px, 2vw, 16px);
 }
 
 .todo-button:hover {
@@ -99,16 +109,19 @@ h1, h2 {
 .todo-list {
     list-style: none;
     margin-block-start: 1rem;
+    inline-size: 100%;
 }
 
 .todo-item {
-    background: #172a45;
-    padding: 0.5rem;
+    background: #001f3f;
+    padding: 0.75rem;
     margin-block: 0.5rem;
     border-radius: 4px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .delete-btn {
@@ -120,33 +133,32 @@ h1, h2 {
     cursor: pointer;
 }
 
-/* Project Cards Styling with Hover Effect */
 .project-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+    gap: clamp(0.5rem, 2vw, 1rem);
     margin-block-start: 1rem;
 }
 
 .project-card {
-    background: #172a45;
-    padding: 1rem;
+    background: #001f3f;
+    padding: clamp(0.75rem, 3vw, 1.5rem);
     border-radius: 4px;
     transition: transform 0.3s, background-color 0.3s;
-    color: #50bfff;
+    color: #00ffcc;
     text-decoration: none;
+    block-size: 100%;
 }
 
 .project-card:hover {
     transform: translateY(-5px);
-    background-color: #1f3555;
+    background-color: #003366;
 }
 
-/* Contact Section Styling with Icon */
 .contact-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: clamp(0.5rem, 2vw, 1rem);
     margin-block-start: 1rem;
 }
 
@@ -154,36 +166,22 @@ h1, h2 {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: #172a45;
-    padding: 1rem;
+    background: #001f3f;
+    padding: clamp(0.75rem, 2vw, 1rem);
     border-radius: 5px;
     text-decoration: none;
-    color: #50bfff;
+    color: #00ffcc;
     transition: transform 0.3s, background-color 0.3s;
 }
 
 .contact-item:hover {
     transform: translateY(-3px);
-    background: #1f3555;
+    background: #003366;
 }
 
-.contact-icon {
-    font-size: 1.5rem;
-    display: inline-block;
-    inline-size: 24px;
-    block-size: 24px;
-}
-
-/* Responsive Design for Mobile Devices */
 @media (max-width: 600px) {
-    body {
-        padding: 1rem;
-    }
-    .container {
-        padding: 1rem;
-    }
-    .todo-input, .todo-button {
-        inline-size: 100%;
-        margin-block: 0.5rem;
+    .typewrite {
+        white-space: normal;
+        word-break: break-word;
     }
 }

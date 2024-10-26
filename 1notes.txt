@@ -1,0 +1,21 @@
+https://codepen.io/reineseele/pen/bwjgVK-- glitch reference
+
+
+.intro-section {
+  color: #00ffcc; /* Original color */
+  transition: color 0.3s ease-in-out;
+}
+
+.intro-section:hover {
+  color: white;
+}
+
+-- optional 
+.intro-section h1 {
+  color: #00ffcc; /* Original color */
+  transition: color 0.3s ease-in-out;
+}
+
+.intro-section:hover h1 {
+  color: white;
+}

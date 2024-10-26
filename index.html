@@ -3,32 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CVFT</title>
+    <title>vinc.e</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="pix/tbicon.png" type="image/png">
+
 </head>
 <body>
-    <div class="circuit-background"></div>
-    <div class="circuit-overlay"></div>
-
+    <canvas id="canvas"></canvas>   
     <header class="intro-section">
         <h1>
-            <a href="#" class="typewrite" data-period="2000" data-type='[" Carl Vincent F. Tumanda", "/* Me? */", "# a full-time student", "$ BSEE", "// certified yapper", "; always learning", " still growing.", "%{ FUCK YOU! %}"]'>
+            <a href="#" class="typewrite" data-period="2000" data-type='[" Carl Vincent F. Tumanda", "/* Me? */", "# a full-time student", "$ BS Electrical Engineering", "// certified yapper", "; always learning", " still growing.", "%{ GODBLESS YOU! %}"]'>
                 <span class="wrap"></span>
             </a>
         </h1>
     </header>
-
+    
+    <!-- picture montage  -->
     <div class="container">
         <section class="fade-in-section">
-            <h2>.to-do-list</h2>
-            <div class="todo-container">
-                <input type="text" class="todo-input" placeholder="Add a new task...">
-                <button class="todo-button">Add Task</button>
-                <ul class="todo-list"></ul>
+            <div class="montage-column">
+                <div class="image-montage">
+                    <div class="montage-item">
+                        <img src="pix/0350-animated-gif-1-one-resistor_orig.gif" alt="Description" loading="lazy">
+                    </div>
+                    <div class="montage-item">
+                        <img src="pix/Example.jpg" alt="Description" loading="lazy">
+                    </div>
+                    <div class="montage-item">
+                        <img src="pix/example2.jpg" alt="Description" loading="lazy">
+                    </div>
+                    <div class="montage-item">
+                        <img src="pix/example3.jpg" alt="Description" loading="lazy">
+                    </div>
+                </div>
             </div>
-        </section>
+        </section>        
+    </div>
 
+    <!-- projects -->
+    <div class="container">     
         <section class="fade-in-section">
             <h2>.projects</h2>
             <div class="project-grid">
@@ -46,33 +60,54 @@
                 </div>
             </div>
         </section>
-
-        <section class="fade-in-section">
-            <h2>.reach-me</h2>
-            <div class="contact-grid">
-                <a href="mailto:carlvincentttumanda@gmail.com" class="contact-item">
-                    <span class="contact-icon"><i class="fas fa-envelope"></i></span>
-                    <span>Email</span>
-                </a>
-                <a href="https://github.com/enemyalert" class="contact-item">
-                    <span class="contact-icon"><i class="fab fa-github"></i></span>
-                    <span>GitHub</span>
-                </a>
-                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="contact-item">
-                    <span class="contact-icon"><i class="fab fa-linkedin"></i></span>
-                    <span>LinkedIn</span>
-                </a>
-                <a href="https://discord.com/users/vinc.e" class="contact-item">
-                    <span class="contact-icon"><i class="fab fa-discord"></i></span>
-                    <span>Discord</span>
-                </a>
-                <a href="https://www.facebook.com/caroluxvincentious/" class="contact-item">
-                    <span class="contact-icon"><i class="fab fa-facebook"></i></span>
-                    <span>Facebook</span>
-                </a>
-            </div>
-        </section>
     </div>
+
+    <!-- reach me and anon msg -->
+    <div class="container">
+        <div class="row">
+            <div class="column">
+                <section class="fade-in-section">
+                    <h2>.anon-msg</h2>
+                    <div class="todo-container">
+                        <input type="text" class="todo-input" placeholder="message me anonymously!">
+                        <button class="todo-button">Send</button>
+                        <ul class="todo-list"></ul>
+                    </div>
+                </section>
+            </div>
+            <div class="column">
+                <section class="fade-in-section">
+                    <h2>.reach-me</h2>
+                    <div class="contact-grid">
+                        <a href="mailto:carlvincentttumanda@gmail.com" class="contact-item">
+                            <span class="contact-icon"><i class="fas fa-envelope"></i></span>
+                            <span>Email</span>
+                        </a>
+                        <a href="https://github.com/enemyalert" class="contact-item">
+                            <span class="contact-icon"><i class="fab fa-github"></i></span>
+                            <span>GitHub</span>
+                        </a>
+                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="contact-item">
+                            <span class="contact-icon"><i class="fab fa-linkedin"></i></span>
+                            <span>LinkedIn</span>
+                        </a>
+                        <a href="https://discord.com/users/vinc.e" class="contact-item">
+                            <span class="contact-icon"><i class="fab fa-discord"></i></span>
+                            <span>Discord</span>
+                        </a>
+                        <a href="https://www.facebook.com/caroluxvincentious/" class="contact-item">
+                            <span class="contact-icon"><i class="fab fa-facebook"></i></span>
+                            <span>Facebook</span>
+                        </a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- blank -->
+    <div class="container"> 
+    </div>    
 
     <script src="script.js"></script>
 </body>

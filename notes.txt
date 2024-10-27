@@ -1,0 +1,9 @@
+To be added soon
+1. for glitchy  reference: https://codepen.io/reineseele/pen/bwjgVK
+
+commit messages:
+- removed .vscode directory
+- moved the css and jsx files to./src directory
+- moved to React (src/script.jsx) and tailwind css for restructuring the project
+- added package.json and node-modules
+

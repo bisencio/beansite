@@ -29,16 +29,15 @@ class TxtType {
     }
 }
 
-// Scroll event to change text color
 const header = document.querySelector('.intro-section');
 const colors = ['#00ffcc', '#ff6b6b', '#4ecdc4', '#45b7d1', '#96f2d7', '#66d9e8', '#748ffc', '#da77f2'];
 let colorIndex = 0;
 let lastScrollTop = 0;
 
-// Event: Scroll to change color and header class
 window.addEventListener('scroll', function() {
-    const currentScrollPosition = window.pageYOffset;
+    const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
     const typewriteElement = document.querySelector('.typewrite');
+    
     if (Math.abs(lastScrollTop - currentScrollPosition) > 50) {
         if (typewriteElement) {
             colorIndex = (colorIndex + 1) % colors.length;
@@ -47,10 +46,20 @@ window.addEventListener('scroll', function() {
         }
         lastScrollTop = currentScrollPosition;
     }
-    currentScrollPosition > 50 ? header.classList.add('scrolled') : header.classList.remove('scrolled');
+    
+    if (currentScrollPosition > 50) {
+        header.classList.add('scrolled');
+        if (typewriteElement) {
+            typewriteElement.style.color = 'white';
+        }
+    } else {
+        header.classList.remove('scrolled');
+        if (typewriteElement) {
+            typewriteElement.style.color = colors[colorIndex];
+        }
+    }
 });
 
-// Intersection Observer for scroll animations
 function handleScrollAnimation() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => entry.isIntersecting && entry.target.classList.add('is-visible'));
@@ -58,37 +67,72 @@ function handleScrollAnimation() {
     document.querySelectorAll('section').forEach(section => observer.observe(section));
 }
 
-// Event: Todo button click and input enter key to add todo item
 const todoInput = document.querySelector('.todo-input');
 const todoButton = document.querySelector('.todo-button');
 const todoList = document.querySelector('.todo-list');
-todoButton.addEventListener('click', addTodo);
-todoInput.addEventListener('keypress', (e) => e.key === 'Enter' && addTodo());
 
-function addTodo() {
-    if (todoInput.value.trim() === '') {
+todoButton?.addEventListener('click', addTodo);
+todoInput?.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        addTodo();
+    }
+});
+
+async function addTodo(e) {
+    if (e) e.preventDefault();
+    
+    const todoInput = document.querySelector('.todo-input');
+    const todoList = document.querySelector('.todo-list');
+    
+    if (!todoInput || todoInput.value.trim() === '') {
+        const errorItem = createMessageElement('Please enter a message');
+        errorItem.style.borderColor = '#ff6b6b';
+        errorItem.querySelector('span').style.color = '#ff6b6b';
+        todoList.appendChild(errorItem);
+        setTimeout(() => errorItem.remove(), 3000);
         return;
     }
-    const todoItem = document.createElement('li');
-    todoItem.classList.add('todo-item');
-    const todoText = document.createElement('span');
-    todoText.textContent = todoInput.value;
-    const deleteBtn = document.createElement('button');
-    deleteBtn.classList.add('delete-btn');
-    deleteBtn.textContent = 'Delete';
-    deleteBtn.onclick = () => todoItem.remove();
-    todoItem.append(todoText, deleteBtn);
-    todoList.appendChild(todoItem);
+
+    const successItem = createMessageElement('Thank you for your message! ✨');
+    successItem.style.borderColor = '#00ffcc';
+    successItem.querySelector('span').style.color = '#00ffcc';
+    todoList.appendChild(successItem);
+    
     todoInput.value = '';
+    
+    setTimeout(() => successItem.remove(), 3000);
 }
 
-// Event: Mouse down and up for project card animation
+function createMessageElement(messageText) {
+    const todoItem = document.createElement('li');
+    todoItem.classList.add('todo-item');
+    todoItem.style.animation = 'fadeIn 0.3s ease-in';
+    todoItem.style.padding = '10px';
+    todoItem.style.marginTop = '10px';
+    todoItem.style.backgroundColor = 'rgba(0, 255, 204, 0.1)';
+    todoItem.style.borderRadius = '4px';
+    todoItem.style.border = '1px solid #00ffcc';
+    
+    const todoText = document.createElement('span');
+    todoText.textContent = messageText;
+    todoText.style.flex = '1';
+    todoText.style.textAlign = 'center';
+    todoText.style.color = '#00ffcc';
+    
+    todoItem.appendChild(todoText);
+    return todoItem;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeMessages();
+    startSlideshow();
+});
+
 document.querySelectorAll('.project-card').forEach(card => {
     card.addEventListener('mousedown', () => card.style.transform = 'scale(0.98)');
     card.addEventListener('mouseup', () => card.style.transform = 'translateY(-5px)');
 });
 
-// Event: Window load to start text typing effect and animations
 window.onload = function() {
     Array.from(document.getElementsByClassName('typewrite')).forEach((el) => {
         const toRotate = el.getAttribute('data-type');
@@ -100,21 +144,51 @@ window.onload = function() {
     handleScrollAnimation();
 };
 
-// Slideshow transition event
 function startSlideshow() {
     const items = document.querySelectorAll('.montage-item');
     let currentItem = 0;
-    setInterval(() => {
-        items.forEach(item => item.classList.remove('active'));
-        items[currentItem].classList.add('active');
+
+    function glitchTransition(fromItem, toItem) {
+        const steps = 5;
+        let step = 0;
+
+        function applyGlitchStep() {
+            if (step >= steps) {
+                items.forEach(item => item.classList.remove('active', 'glitch'));
+                toItem.classList.add('active');
+                return;
+            }
+
+            items.forEach(item => item.classList.remove('active', 'glitch'));
+
+            if (Math.random() > 0.5) {
+                fromItem.classList.add('active', 'glitch');
+                fromItem.style.transform = `translate(${(Math.random() - 0.5) * 10}px, ${(Math.random() - 0.5) * 10}px)`;
+            } else {
+                toItem.classList.add('active', 'glitch');
+                toItem.style.transform = `translate(${(Math.random() - 0.5) * 10}px, ${(Math.random() - 0.5) * 10}px)`;
+            }
+
+            step++;
+            setTimeout(applyGlitchStep, 100);
+        }
+
+        applyGlitchStep();
+    }
+
+    function nextSlide() {
+        const prevItem = items[currentItem];
         currentItem = (currentItem + 1) % items.length;
-    }, 5000);
+        const nextItem = items[currentItem];
+        glitchTransition(prevItem, nextItem);
+    }
+
+    items[0].classList.add('active');
+    setInterval(nextSlide, 5000);
 }
 
-// Event: Document ready to start slideshow
 document.addEventListener('DOMContentLoaded', startSlideshow);
 
-// Particle background setup and movement
 var can = document.getElementById("canvas");
 var ctx = can.getContext("2d");
 can.width = window.innerWidth;
@@ -163,7 +237,6 @@ function pulse() {
     }
 }
 
-// Animation frame loop for particles
 function gameMove(){
     requestAnimationFrame(gameMove)
     Clear()
@@ -175,8 +248,6 @@ function gameMove(){
     }
 }
 
-
-// Event: Window resize to adjust canvas size
 window.addEventListener('resize', function() {
     can.width = window.innerWidth;
     can.height = window.innerHeight;
@@ -184,3 +255,524 @@ window.addEventListener('resize', function() {
 
 pulse()
 gameMove()
+
+class TextScramble {
+    constructor(el) {
+        this.el = el;
+        this.chars = '!<>-_\\/[]{}—=+*^?#$%&@|`~';
+        this.originalText = el.innerText;
+        this.update = this.update.bind(this);
+        this.isScrambling = false;
+        this.maxWidth = el.closest('.project-card') ? 
+            el.closest('.project-card').offsetWidth - 40 :
+            Infinity;
+    }
+
+    setText(newText) {
+        if (this.isScrambling) return Promise.resolve();
+        this.isScrambling = true;
+        
+        const oldText = this.el.innerText;
+        const length = Math.max(oldText.length, newText.length);
+        const promise = new Promise((resolve) => this.resolve = resolve);
+        this.queue = [];
+        
+        for (let i = 0; i < length; i++) {
+            const from = oldText[i] || '';
+            const to = newText[i] || '';
+            const start = Math.floor(Math.random() * 20);
+            const end = start + Math.floor(Math.random() * 20);
+            this.queue.push({ from, to, start, end });
+        }
+        
+        cancelAnimationFrame(this.frameRequest);
+        this.frame = 0;
+        this.update();
+        return promise;
+    }
+
+    update() {
+        let output = '';
+        let complete = 0;
+        
+        for (let i = 0, n = this.queue.length; i < n; i++) {
+            let { from, to, start, end, char } = this.queue[i];
+            if (this.frame >= end) {
+                complete++;
+                output += to;
+            } else if (this.frame >= start) {
+                if (!char || Math.random() < 0.1) {
+                    char = this.randomChar();
+                    this.queue[i].char = char;
+                }
+                output += char;
+            } else {
+                output += from;
+            }
+        }
+        
+        this.el.innerText = output;
+        
+        if (complete === this.queue.length) {
+            this.isScrambling = false;
+            this.resolve();
+        } else {
+            this.frameRequest = requestAnimationFrame(this.update);
+        }
+        this.frame++;
+    }
+
+    randomChar() {
+        return this.chars[Math.floor(Math.random() * this.chars.length)];
+    }
+}
+
+function initializeAllScramblers() {
+    const textElements = document.querySelectorAll(`
+        h2, h3, p, 
+        .contact-item span,
+        .project-card p,
+        .todo-item span
+    `);
+    
+    textElements.forEach(element => {
+        if (element.closest('header')) return;
+        
+        if (!scramblers.has(element) && element.innerText.trim() !== '') {
+            const scrambler = new TextScramble(element);
+            scramblers.set(element, scrambler);
+        }
+    });
+}
+
+let scrollTimeout;
+let lastScrollPosition = window.pageYOffset;
+const messages = document.querySelectorAll('.todo-item span');
+const scramblers = new Map();
+
+function initializeScrambler(element) {
+    if (!scramblers.has(element)) {
+        const scrambler = new TextScramble(element);
+        scramblers.set(element, scrambler);
+    }
+}
+
+let lastScrambleTime = 0;
+const SCRAMBLE_COOLDOWN = 1000;
+
+window.addEventListener('scroll', function() {
+    const currentTime = Date.now();
+    const currentScrollPosition = window.pageYOffset;
+    const scrollDelta = Math.abs(currentScrollPosition - lastScrollPosition);
+    
+    if (scrollDelta > 50 && currentTime - lastScrambleTime > SCRAMBLE_COOLDOWN) {
+        scramblers.forEach((scrambler, element) => {
+            if (element.isConnected && isElementInViewport(element)) {
+                scrambler.setText(scrambler.originalText);
+            }
+        });
+        
+        lastScrollPosition = currentScrollPosition;
+        lastScrambleTime = currentTime;
+    }
+});
+
+window.removeEventListener('scroll', function() {
+    clearTimeout(scrollTimeout);
+});
+
+function isElementInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    return (
+        rect.top >= -100 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) + 100 &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeAllScramblers();
+    initializeMessages();
+    startSlideshow();
+});
+
+const originalAddTodo = addTodo;
+function addTodo() {
+    originalAddTodo.call(this);
+    setTimeout(initializeAllScramblers, 100);
+}
+
+const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+        if (mutation.addedNodes.length) {
+            setTimeout(initializeAllScramblers, 100);
+        }
+    });
+});
+
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
+});
+
+document.querySelectorAll('.project-card').forEach(card => {
+  let touchStartX = 0;
+  let touchEndX = 0;
+  let currentCard = null;
+  let isScrolling = false;
+  let scrollTimeout;
+  
+  card.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    currentCard = card;
+    isScrolling = false;
+    
+    clearTimeout(scrollTimeout);
+  });
+  
+  card.addEventListener('touchmove', (e) => {
+    touchEndX = e.touches[0].clientX;
+    const diffX = touchEndX - touchStartX;
+    
+    if (Math.abs(diffX) > 5) {
+      isScrolling = true;
+      
+      document.querySelectorAll('.project-card').forEach(c => {
+        if (c !== currentCard) {
+          c.classList.remove('stuck');
+        }
+      });
+    }
+    
+    const elementAtPoint = document.elementFromPoint(
+      e.touches[0].clientX,
+      e.touches[0].clientY
+    );
+    
+    const newCard = elementAtPoint?.closest('.project-card');
+    if (newCard && newCard !== currentCard) {
+      currentCard?.classList.remove('stuck');
+      currentCard = newCard;
+      
+      if (Math.abs(diffX) < 3) {
+        newCard.classList.add('stuck');
+      }
+    }
+  });
+  
+  card.addEventListener('touchend', (e) => {
+    const diffX = touchEndX - touchStartX;
+    
+    if (!isScrolling && Math.abs(diffX) < 5) {
+      card.classList.toggle('stuck');
+    }
+    
+    scrollTimeout = setTimeout(() => {
+      isScrolling = false;
+    }, 150);
+  });
+});
+
+let touchStartY = 0;
+document.addEventListener('touchstart', (e) => {
+  touchStartY = e.touches[0].clientY;
+});
+
+document.addEventListener('touchmove', (e) => {
+  const diffY = e.touches[0].clientY - touchStartY;
+  if (Math.abs(diffY) > 10) {
+    document.querySelectorAll('.project-card').forEach(card => {
+      card.classList.remove('stuck');
+    });
+  }
+});
+
+function initializeProjectScroll() {
+    const projectGrid = document.querySelector('.project-grid');
+    let autoScrollInterval;
+    let isUserScrolling = false;
+    let lastInteractionTime = Date.now();
+    const INTERACTION_TIMEOUT = 5000;
+
+    function autoScroll() {
+        if (!isUserScrolling && Date.now() - lastInteractionTime > INTERACTION_TIMEOUT) {
+            const scrollAmount = 300;
+            const maxScroll = projectGrid.scrollWidth - projectGrid.clientWidth;
+            const newScrollPosition = projectGrid.scrollLeft + scrollAmount;
+            
+            if (newScrollPosition >= maxScroll) {
+                projectGrid.scrollTo({ 
+                    'inset-inline-start': 0,
+                    behavior: 'smooth' 
+                });
+            } else {
+                projectGrid.scrollTo({ 
+                    'inset-inline-start': newScrollPosition,
+                    behavior: 'smooth' 
+                });
+            }
+        }
+    }
+
+    autoScrollInterval = setInterval(autoScroll, 5000);
+
+    const stopAutoScroll = () => {
+        isUserScrolling = true;
+        lastInteractionTime = Date.now();
+        clearInterval(autoScrollInterval);
+    };
+
+    const resumeAutoScroll = () => {
+        isUserScrolling = false;
+        if (!autoScrollInterval) {
+            autoScrollInterval = setInterval(autoScroll, 5000);
+        }
+    };
+
+    const interactionEvents = ['mouseenter', 'touchstart', 'wheel', 'keydown'];
+    const endInteractionEvents = ['mouseleave', 'touchend'];
+
+    interactionEvents.forEach(event => {
+        projectGrid.addEventListener(event, stopAutoScroll);
+    });
+
+    endInteractionEvents.forEach(event => {
+        projectGrid.addEventListener(event, () => {
+            setTimeout(resumeAutoScroll, INTERACTION_TIMEOUT);
+        });
+    });
+
+    projectGrid.addEventListener('scroll', () => {
+        lastInteractionTime = Date.now();
+    });
+
+    return () => {
+        clearInterval(autoScrollInterval);
+        autoScrollInterval = null;
+    };
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeMessages();
+    startSlideshow();
+    initializeAllScramblers();
+    initializeProjectScroll();
+});
+
+function setRandomFloatingDurations() {
+    const sections = document.querySelectorAll('section');
+    
+    sections.forEach(section => {
+        const randomDuration = Math.random() * (6 - 3) + 3;
+        const randomDelay = Math.random() * 2;
+        
+        section.style.setProperty('--float-duration', `${randomDuration}s`);
+        section.style.animationDelay = `-${randomDelay}s`;
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeMessages();
+    startSlideshow();
+    initializeAllScramblers();
+    initializeProjectScroll();
+    setRandomFloatingDurations();
+});
+
+function updateFloatingDurations() {
+    setRandomFloatingDurations();
+    const randomInterval = Math.random() * (20000 - 10000) + 10000;
+    setTimeout(updateFloatingDurations, randomInterval);
+}
+
+updateFloatingDurations();
+
+function initializeMessages() {
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const todoButton = document.querySelector('.todo-button');
+    const todoInput = document.querySelector('.todo-input');
+    
+    if (todoButton) {
+        todoButton.addEventListener('click', addTodo);
+    }
+    
+    if (todoInput) {
+        todoInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addTodo(e);
+            }
+        });
+    }
+    
+    initializeMessages();
+});
+
+function initializeProjectMouseScroll() {
+    const projectGrid = document.querySelector('.project-grid');
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    projectGrid.addEventListener('mousedown', (e) => {
+        isDown = true;
+        projectGrid.style.cursor = 'grabbing';
+        startX = e.pageX - projectGrid.offsetLeft;
+        scrollLeft = projectGrid.scrollLeft;
+        e.preventDefault();
+    });
+
+    projectGrid.addEventListener('mouseleave', () => {
+        isDown = false;
+        projectGrid.style.cursor = 'grab';
+    });
+
+    projectGrid.addEventListener('mouseup', () => {
+        isDown = false;
+        projectGrid.style.cursor = 'grab';
+    });
+
+    projectGrid.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - projectGrid.offsetLeft;
+        const walk = (x - startX) * 2;
+        projectGrid.scrollLeft = scrollLeft - walk;
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeMessages();
+    startSlideshow();
+    initializeAllScramblers();
+    initializeProjectScroll();
+    setRandomFloatingDurations();
+    initializeProjectMouseScroll();
+});
+
+function initializeAutoScroll() {
+    const projectGrid = document.querySelector('.project-grid');
+    let autoScrollInterval;
+    let isUserInteracting = false;
+    const scrollAmount = 1;
+    const scrollInterval = 30;
+    const pauseDuration = 2000;
+
+    function startAutoScroll() {
+        let direction = 1;
+        let pauseTimeout = null;
+
+        autoScrollInterval = setInterval(() => {
+            if (!isUserInteracting) {
+                const maxScroll = projectGrid.scrollWidth - projectGrid.clientWidth;
+                const currentScroll = projectGrid.scrollLeft;
+
+                if (currentScroll >= maxScroll) {
+                    direction = -1;
+                    if (!pauseTimeout) {
+                        clearInterval(autoScrollInterval);
+                        pauseTimeout = setTimeout(() => {
+                            startAutoScroll();
+                            pauseTimeout = null;
+                        }, pauseDuration);
+                    }
+                } else if (currentScroll <= 0) {
+                    direction = 1;
+                    if (!pauseTimeout) {
+                        clearInterval(autoScrollInterval);
+                        pauseTimeout = setTimeout(() => {
+                            startAutoScroll();
+                            pauseTimeout = null;
+                        }, pauseDuration);
+                    }
+                }
+
+                projectGrid.scrollLeft += (scrollAmount * direction);
+            }
+        }, scrollInterval);
+    }
+
+    startAutoScroll();
+
+    const interactionEvents = ['mouseenter', 'touchstart', 'wheel', 'keydown'];
+    interactionEvents.forEach(event => {
+        projectGrid.addEventListener(event, () => {
+            isUserInteracting = true;
+            clearInterval(autoScrollInterval);
+        });
+    });
+
+    const endInteractionEvents = ['mouseleave', 'touchend'];
+    endInteractionEvents.forEach(event => {
+        projectGrid.addEventListener(event, () => {
+            setTimeout(() => {
+                isUserInteracting = false;
+                startAutoScroll();
+            }, 1000);
+        });
+    });
+
+    window.addEventListener('unload', () => {
+        clearInterval(autoScrollInterval);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeMessages();
+    startSlideshow();
+    initializeAllScramblers();
+    initializeProjectScroll();
+    setRandomFloatingDurations();
+    initializeProjectMouseScroll();
+    initializeAutoScroll();
+});
+
+function initializeMobileHover() {
+    const projectGrid = document.querySelector('.project-grid');
+    let scrollTimeout;
+
+    projectGrid.addEventListener('scroll', () => {
+        projectGrid.classList.add('is-scrolling');
+        
+        clearTimeout(scrollTimeout);
+        
+        scrollTimeout = setTimeout(() => {
+            projectGrid.classList.remove('is-scrolling');
+        }, 150);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeMessages();
+    startSlideshow();
+    initializeAllScramblers();
+    initializeProjectScroll();
+    setRandomFloatingDurations();
+    initializeProjectMouseScroll();
+    initializeAutoScroll();
+    initializeMobileHover();
+});
+
+function initializeScrollIndicators() {
+    const projectGrid = document.querySelector('.project-grid');
+    
+    function updateScrollIndicators() {
+        const isAtStart = projectGrid.scrollLeft <= 10;
+        const isAtEnd = projectGrid.scrollLeft >= (projectGrid.scrollWidth - projectGrid.clientWidth - 10);
+        
+        projectGrid.setAttribute('data-at-start', isAtStart);
+        projectGrid.setAttribute('data-at-end', isAtEnd);
+    }
+    
+    projectGrid.addEventListener('scroll', updateScrollIndicators);
+    
+    updateScrollIndicators();
+    
+    window.addEventListener('resize', updateScrollIndicators);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeScrollIndicators();
+});

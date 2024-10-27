@@ -7,3 +7,7 @@ commit messages:
 - moved to React (src/script.jsx) and tailwind css for restructuring the project
 - added package.json and node-modules
 
+————————————————————————————————————————————————
+- removed tailwindcss, i hate tailwind
+- added text scrambler to all text except h1
+- removed anon msg functionality
